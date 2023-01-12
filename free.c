@@ -6,7 +6,7 @@
 /*   By: aquincho <aquincho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 10:44:10 by aquincho          #+#    #+#             */
-/*   Updated: 2023/01/11 13:55:33 by aquincho         ###   ########.fr       */
+/*   Updated: 2023/01/12 08:58:00 by aquincho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ void	ft_free_cmd(t_cmd *cmd)
 	if (!cmd)
 		return ;
 	ft_free_arg(cmd->arg);
-	close(cmd->pipe_fd[0]);
-	close(cmd->pipe_fd[1]);
+	//close(cmd->pipe_fd[0]);
+	//close(cmd->pipe_fd[1]);
 	ft_free_cmd(cmd->next);
 	free(cmd);
 }

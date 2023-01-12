@@ -6,7 +6,7 @@
 /*   By: aquincho <aquincho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 10:15:51 by aquincho          #+#    #+#             */
-/*   Updated: 2023/01/11 13:51:53 by aquincho         ###   ########.fr       */
+/*   Updated: 2023/01/12 09:28:24 by aquincho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,11 @@ static int	ft_execute_cmd(t_cmd *cmd, t_cmds *cmds)
 			dup2(cmd->pipe_fd[1], 1);
 		}
 		if (cmd->prev && cmd->prev->type == type_pipe)
+		{
+			//close(cmd->prev->pipe_fd[1]);
 			dup2(0, cmd->prev->pipe_fd[0]);
+			//close(cmd->prev->pipe_fd[0]);
+		}
 		if (execve(cmd->arg[0], cmd->arg, cmds->env) < 0)
 			ft_error_exit(cmds, error_cmd, cmd->arg[0]);
 	}
@@ -73,6 +77,17 @@ static int	ft_execute_cmd(t_cmd *cmd, t_cmds *cmds)
 		{
 			close(cmd->pipe_fd[1]);
 			dup2(cmd->pipe_fd[0], 0);
+		}
+		if (cmd->prev && cmd->prev->type == type_pipe)
+		{
+			close(cmd->prev->pipe_fd[0]);
+			close(cmd->prev->pipe_fd[1]);
+			if (cmd->type != type_pipe)
+			{
+				close(cmd->pipe_fd[0]);
+				dup2(1, cmd->pipe_fd[1]);
+				close(cmd->pipe_fd[1]);
+			}
 		}
 	}
 	return (0);
